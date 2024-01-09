@@ -13,11 +13,11 @@
   <f:if condition="{onSubmit}">
     <f:then>
       <f:form
-        class="form-kontakt"
         target="_top"
         fieldNamePrefix=""
         action="login"
         onsubmit="{onSubmit}"
+	additionalAttributes="{spellcheck: 'false'}"
         requestToken="{requestToken}"
       >
         <f:render section="content" arguments="{_all}" />
@@ -51,7 +51,7 @@
   </div>
 
   <f:section name="content">
-    <fieldset class="ig-mfa-frontend-loginForm">
+    <fieldset class="ig-mfa-frontend-login-form">
       <f:comment>
         <legend>
           <f:translate key="login" />

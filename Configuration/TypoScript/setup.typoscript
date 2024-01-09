@@ -14,6 +14,7 @@ plugin.tx_igmfafrontend_mfaconfiguration {
     }
 }
 
+page.includeCSS.mfafrontendBase = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.cssFileBase}
 page.includeCSS.mfafrontend = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.cssFile}
 page.includeJSFooter.mfafrontend = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.jsFile}
 

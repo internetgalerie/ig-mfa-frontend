@@ -17,10 +17,13 @@ plugin.tx_igmfafrontend_mfaconfiguration {
         # cat=IG MFA Frontend Login//b30; type=string; label=Name for Authentificator: leave empty for site title
       name =
       
-       # cat=IG MFA Frontend Login/file/d10; type=string; label=Path to CSS file
+       # cat=IG MFA Frontend Login/file/d10; type=string; label=Path to base CSS file
+       cssFileBase = EXT:ig_mfa_frontend/Resources/Public/Css/base.css
+       
+       # cat=IG MFA Frontend Login/file/d20; type=string; label=Path to configuration CSS file
        cssFile = EXT:ig_mfa_frontend/Resources/Public/Css/configuration.css
        
-       # cat=IG MFA Frontend Login/file/d20; type=string; label=Path to JavaScript file
+       # cat=IG MFA Frontend Login/file/e10; type=string; label=Path to JavaScript file
        jsFile = EXT:ig_mfa_frontend/Resources/Public/JavaScript/ig-mfa-frontend.js
 
     }

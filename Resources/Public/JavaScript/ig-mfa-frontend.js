@@ -28,9 +28,10 @@ document
     dialogBox.innerHTML = `
   <div class="ig-mfa-frontend-infobox" aria-modal="true" role="dialog">
         <div class="ig-mfa-frontend-infobox-content">
-            <div class="ig-mfa-frontend-infobox-header">
+            <div class="header">
                 <h4 class="ig-mfa-frontend-infobox-title">${title}</h4>
-                <button class="ig-mfa-frontend-infobox-close">
+                <button class="action-close">
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#fff'><path d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/></svg>
                 </button>
             </div>
             <div class="ig-mfa-frontend-infobox-body">
@@ -38,7 +39,7 @@ document
                 <pre>${infoButton.getAttribute("data-url")}</pre>
             </div>
             <div class="ig-mfa-frontend-infobox-footer">
-                <button class="ig-mfa-frontend-infobox-close btn btn-deafult" name="ok">${okButton}</button>
+                <button class="btn btn-deafult action-close" name="ok">${okButton}</button>
             </div>
         </div>
         </div>
@@ -48,10 +49,7 @@ document
 
     // Add a click event to close the dialog
     dialogBox.addEventListener("click", function (event) {
-      if (
-        event.target === dialogBox ||
-        event.target.classList.contains("ig-mfa-frontend-infobox-close")
-      ) {
+      if (event.target === dialogBox || event.target.closest(".action-close")) {
         document.body.removeChild(dialogBox);
       }
     });
