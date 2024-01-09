@@ -1,0 +1,25 @@
+plugin.tx_igmfafrontend_mfaconfiguration {
+    view {
+        templateRootPaths.0 = EXT:ig_mfa_frontend/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_igmfafrontend_mfaconfiguration.view.templateRootPath}
+        partialRootPaths.0 = EXT:ig_mfa_frontend/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_igmfafrontend_mfaconfiguration.view.partialRootPath}
+        layoutRootPaths.0 = EXT:ig_mfa_frontend/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_igmfafrontend_mfaconfiguration.view.layoutRootPath}
+    }
+    settings {
+        allowedProviders = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.allowedProviders}
+	recommendedMfaProvider = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.recommendedMfaProvider}
+	name = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.name}
+    }
+}
+
+page.includeCSS.mfafrontend = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.cssFile}
+page.includeJSFooter.mfafrontend = {$plugin.tx_igmfafrontend_mfaconfiguration.settings.jsFile}
+
+# Add Template Path for felogin
+plugin.tx_felogin_login {
+  view {
+    templateRootPaths.9 = EXT:ig_mfa_frontend/Resources/Private/Extensions/felogin/Templates
+  }
+}

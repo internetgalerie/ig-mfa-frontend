@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+        <file source-language="en" datatype="plaintext" original="EXT:ig_mfa_frontend/Resources/Private/Language/locallang.xlf" date="2023-11-24T100:22:32Z" product-name="ig_mfa_frontend">
+                <header/>
+                <body>
+                  <trans-unit id="attemptOfMaximum" resname="attemptOfMaximum">
+                    <source>Attempt %s of %s</source>
+                  </trans-unit>
+                </body>
+        </file>
+</xliff>

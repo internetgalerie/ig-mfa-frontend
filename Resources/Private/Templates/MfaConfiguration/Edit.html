@@ -1,0 +1,108 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  data-namespace-typo3-fluid="true"
+>
+  <f:layout name="Default" />
+
+  <f:section name="content">
+    <f:variable
+      name="providerTitle"
+      value="{provider.title -> f:translate(key: provider.title, default: provider.title)}"
+    />
+
+    <f:flashMessages queueIdentifier="core.template.flashMessages" />
+    <f:flashMessages />
+
+    <div class="ig-mfa-frontend-infobox-BackToOverview">
+      <f:link.action action="overview" class=""
+        ><f:translate
+          key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:standalone.selection.goBack"
+      /></f:link.action>
+    </div>
+    <h1>
+      <f:translate
+        key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.title"
+        arguments="{0: providerTitle}"
+      />
+    </h1>
+      <p>
+        <f:format.nl2br
+          >{provider.description -> f:translate(key: provider.description, default:
+          provider.description)}</f:format.nl2br
+        >
+      </p>
+      <f:form
+        method="post"
+        action="save"
+        enctype="multipart/form-data"
+        id="mfaConfigurationController"
+      >
+        <f:form.hidden name="identifier" value="{provider.identifier}" />
+        <div class="">{providerContent -> f:format.raw()}</div>
+        <div class="mfa-provider-settings col-lg-6">
+          <f:if condition="{provider.defaultProviderAllowed}">
+              <div class="">
+                <h4>
+                  <f:translate
+                    key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.defaultProvider"
+                  />
+                </h4>
+                <p>
+                  <f:translate
+                    key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.defaultProvider.description"
+                  />
+                </p>
+                <div class="form-check">
+                  <input type="checkbox" name="defaultProvider" id="defaultProvider"
+                  class="form-check-input" value="1" {f:if(condition: isDefaultProvider, then:
+                  'checked="checked"')} />
+                  <label class="form-check-label" for="defaultProvider">
+                    <f:translate
+                      key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.defaultProvider.inputLabel"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </f:if>
+          <div class="row">
+            <div class="col">
+              <br/>
+              <h4>
+                <f:translate
+                  key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.deactivateProvider"
+                />
+              </h4>
+              
+              <p>
+                <f:translate
+                  key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.deactivateProvider.description"
+                />
+              </p>
+              <div class="ig-mfa-frontend-deactivateButton">
+              <f:link.action
+                action="deactivate"
+                arguments="{identifier: provider.identifier}"
+                class="btn btn-danger"
+                title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.deactivateLinkTitle', arguments: {0: providerTitle})}"
+              >
+              
+                <core:icon identifier="actions-toggle-off" />
+                <f:translate
+                  key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.deactivateProvider.linkText"
+                />
+              </f:link.action>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ig-mfa-frontend-saveButton"><f:form.submit
+          class="ig-mfa-frontend-infobox-setupButton"
+          name="enable"
+          value="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:standalone.setup')}"
+        /></div>
+      </f:form>
+    </div>
+  </f:section>
+</html>

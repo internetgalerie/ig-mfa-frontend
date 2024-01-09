@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+        <file source-language="en" datatype="plaintext" original="EXT:ig_mfa_frontend/Resources/Private/Language/Database.xlf" date="2023-11-24T100:22:32Z" product-name="ig_mfa_frontend">
+                <header/>
+                <body>
+                        <trans-unit id="tt_content.plugin.ig_mfa_frontend_mfaconfiguration.title" resname="tt_content.plugin.ig_mfa_frontend_mfaconfiguration.title">
+                                <source>Frontend User: MFA Configuration</source>
+                        </trans-unit>
+                </body>
+        </file>
+</xliff>

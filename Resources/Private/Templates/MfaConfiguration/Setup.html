@@ -1,0 +1,59 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  data-namespace-typo3-fluid="true"
+>
+  <f:layout name="Default" />
+
+  <f:section name="content">
+    <f:flashMessages />
+    <h1>
+      <f:translate
+        key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:setup.title"
+        arguments="{0: '{provider.title -> f:translate(key: provider.title, default: provider.title)}'}"
+      />
+    </h1>
+
+    <div class="row g-6">
+      <div class="col">
+        <div class="ig-mfa-frontend-infobox-BackToOverview">
+          <f:link.action action="overview" class=""
+            ><f:translate
+              key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:standalone.selection.goBack"
+          /></f:link.action>
+        </div>
+        <f:form
+          method="post"
+          action="activate"
+          enctype="multipart/form-data"
+          id="mfaConfigurationController"
+        >
+          <f:form.hidden name="identifier" value="{provider.identifier}" />
+          {providerContent -> f:format.raw()}
+          <div class="row">
+            <f:if condition="{provider.identifier} == 'totp'">
+              <f:then>
+                <div class="col-lg-4"></div>
+              </f:then>
+              <f:else>
+                <div class="col-lg-6"></div>
+              </f:else>
+            </f:if>
+            <div class="col-lg-6">
+              <f:form.submit
+                class="ig-mfa-frontend-infobox-setupButton"
+                name="enable"
+                value="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:standalone.setup')}"
+              />
+            </div>
+          </div>
+        </f:form>
+      </div>
+      <f:if condition="{provider.setupInstructions}">
+        <div class="col-md-4">
+          <f:render partial="Mfa/SetupInstructions" arguments="{provider: provider}" />
+        </div>
+      </f:if>
+    </div>
+  </f:section>
+</html>

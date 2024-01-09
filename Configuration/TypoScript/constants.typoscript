@@ -1,0 +1,27 @@
+plugin.tx_igmfafrontend_mfaconfiguration {
+    view {
+        # cat=IG MFA Frontend Login/file; type=string; label=Path to template root (FE)
+        templateRootPath = EXT:ig_mfa_frontend/Resources/Private/Templates/
+        # cat=IG MFA Frontend Login/file; type=string; label=Path to template partials (FE)
+        partialRootPath = EXT:ig_mfa_frontend/Resources/Private/Partials/
+        # cat=IG MFA Frontend Login/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:ig_mfa_frontend/Resources/Private/Layouts/
+    }
+    settings {
+        # cat=IG MFA Frontend Login//b10; type=string; label=Allowed MFA Providers: leave empty for all installed providers
+      allowedProviders = 
+
+      # cat=IG MFA Frontend Login//b20; type=string; label=Set the identifier of the multi-factor authentication provider, recommended for all users.
+       recommendedMfaProvider = totp
+
+        # cat=IG MFA Frontend Login//b30; type=string; label=Name for Authentificator: leave empty for site title
+      name =
+      
+       # cat=IG MFA Frontend Login/file/d10; type=string; label=Path to CSS file
+       cssFile = EXT:ig_mfa_frontend/Resources/Public/Css/configuration.css
+       
+       # cat=IG MFA Frontend Login/file/d20; type=string; label=Path to JavaScript file
+       jsFile = EXT:ig_mfa_frontend/Resources/Public/JavaScript/ig-mfa-frontend.js
+
+    }
+}

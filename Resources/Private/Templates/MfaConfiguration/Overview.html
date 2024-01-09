@@ -1,0 +1,191 @@
+<html
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+  xmlns:mfa="http://typo3.org/ns/Internetgalerie/IgMfaFrontend/ViewHelpers"
+  data-namespace-typo3-fluid="true"
+>
+  <f:layout name="Default" />
+
+  <f:section name="content">
+    <h1>
+      <f:translate
+        key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.title"
+      />
+    </h1>
+
+    <f:flashMessages queueIdentifier="core.template.flashMessages" />
+    <f:flashMessages />
+
+    <f:if condition="{setupRequired}">
+      <f:then>
+        <f:if condition="{providers}">
+          <f:then>
+            <f:be.infobox
+              state="1"
+              title="{f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.setupRequired.title')}"
+            >
+              <p>
+                <f:translate
+                  key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.setupRequired.message"
+                />
+              </p>
+            </f:be.infobox>
+          </f:then>
+          <f:else>
+            <f:be.infobox
+              state="2"
+              title="{f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.noProviders.title')}"
+            >
+              <p>
+                <f:translate
+                  key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.noProviders.errorMessage"
+                />
+              </p>
+            </f:be.infobox>
+          </f:else>
+        </f:if>
+      </f:then>
+      <f:else if="!{providers}">
+        <f:be.infobox
+          state="-1"
+          title="{f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.noProviders.title')}"
+        >
+          <p>
+            <f:translate
+              key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.noProviders.message"
+            />
+          </p>
+        </f:be.infobox>
+      </f:else>
+    </f:if>
+
+    <f:if condition="{providers}">
+      <f:then>
+        <div class="card-container">
+          <f:for each="{providers}" as="provider">
+            <f:render
+              section="Item"
+              arguments="{provider: provider, defaultProvider: defaultProvider, recommendedProvider: recommendedProvider}"
+            />
+          </f:for>
+        </div>
+      </f:then>
+    </f:if>
+  </f:section>
+
+  <f:section name="Item">
+    <f:variable
+      name="providerTitle"
+      value="{provider.title -> f:translate(key: provider.title, default: provider.title)}"
+    />
+    <div
+      class="card card-size-fixed-small {f:if(condition: '{recommendedProvider} == {provider.identifier}', then: 'card-success')}"
+      id="{provider.identifier}-provider"
+    >
+      <div class="card-header">
+        <div class="card-icon">
+          <core:icon identifier="{provider.iconIdentifier}" size="large" />
+        </div>
+        <div class="card-header-body">
+          <h2 class="card-title">
+            {providerTitle}
+            <mfa:ifHasState state="active" provider="{provider}">
+              <span
+                class="badge badge-{mfa:ifHasState(state: 'locked', provider: provider, then: 'danger', else: 'success')}"
+              ><f:translate
+                  key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.badge.{mfa:ifHasState(state: 'locked', provider: provider, then: 'locked', else: 'active')}"
+                /></span>
+            </mfa:ifHasState>
+            <f:if condition="{defaultProvider} == {provider.identifier}">
+              <span
+                title="{f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.defaultProvider')}"
+              >
+                <core:icon identifier="actions-star" />
+              </span>
+            </f:if>
+          </h2>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          {provider.description -> f:translate(key: provider.description, default:
+          provider.description)}
+        </p>
+      </div>
+      <div class="card-footer">
+        <mfa:ifHasState state="active" provider="{provider}">
+          <f:then>
+            <mfa:ifHasState state="locked" provider="{provider}">
+              <f:then>
+                <f:link.action
+                  action="unlock"
+                  arguments="{identifier: provider.identifier}"
+                  class="btn btn-success"
+                  title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.unlockLinkTitle', arguments: {0: providerTitle})}"
+                >
+                  <core:icon identifier="actions-unlock" />
+                  <f:translate
+                    key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.unlockLinkLabel"
+                  />
+                </f:link.action>
+              </f:then>
+              <f:else>
+                <f:comment>
+                  <f:link.action
+                    action="edit"
+                    arguments="{identifier: provider.identifier}"
+                    class="btn btn-default"
+                    title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.editLinkTitle', arguments: {0: providerTitle})}"
+                  >
+                    <core:icon identifier="actions-open" />
+                    <f:translate
+                      key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.editLinkLabel"
+                    />
+                  </f:link.action>
+                </f:comment>
+                <mfa:isDefaultProviderAllowed provider="{provider}">
+                  <f:link.action
+                    action="default"
+                    arguments="{identifier: provider.identifier}"
+                    class="btn {f:if(condition: '{defaultProvider} == {provider.identifier}', then: 'btn-dark', else: 'btn-default')}"
+                    title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.editLinkTitle', arguments: {0: providerTitle})}"
+                  >
+                    <core:icon identifier="actions-star" />
+                    <f:translate
+                      key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:edit.defaultProvider"
+                    />
+                  </f:link.action>
+                </mfa:isDefaultProviderAllowed>
+              </f:else>
+            </mfa:ifHasState>
+            <f:link.action
+              action="deactivate"
+              arguments="{identifier: provider.identifier}"
+              class="btn btn-danger"
+              title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.deactivateLinkTitle', arguments: {0: providerTitle})}"
+            >
+              <core:icon identifier="actions-toggle-off" />
+              <f:translate
+                key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.deactivateLinkLabel"
+              />
+            </f:link.action>
+          </f:then>
+          <f:else>
+            <f:link.action
+              action="setup"
+              arguments="{identifier: provider.identifier}"
+              class="btn btn-{f:if(condition: '{recommendedProvider} == {provider.identifier}', then: 'success', else: 'default')}"
+              title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.setupLinkTitle', arguments: {0: providerTitle})}"
+            >
+              <core:icon identifier="actions-plus" />
+              <f:translate
+                key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:overview.setupLinkLabel"
+              />
+            </f:link.action>
+          </f:else>
+        </mfa:ifHasState>
+      </div>
+    </div>
+  </f:section>
+</html>

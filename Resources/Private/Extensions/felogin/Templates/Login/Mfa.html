@@ -1,0 +1,157 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+  <f:flashMessages />
+  <f:if condition="{cookieWarning}">
+    <f:render partial="CookieWarning" />
+  </f:if>
+  <f:comment>
+    <f:if condition="{messageKey}">
+      <p>
+        <f:render partial="RenderLabelOrMessage" arguments="{key: '{messageKey}_message'}" />
+      </p>
+    </f:if>
+  </f:comment>
+  <f:if condition="{onSubmit}">
+    <f:then>
+      <f:form
+        class="form-kontakt"
+        target="_top"
+        fieldNamePrefix=""
+        action="login"
+        onsubmit="{onSubmit}"
+        requestToken="{requestToken}"
+      >
+        <f:render section="content" arguments="{_all}" />
+      </f:form>
+    </f:then>
+    <f:else>
+      <f:form
+        class="form-kontakt"
+        target="_top"
+        fieldNamePrefix=""
+        action="login"
+        requestToken="{requestToken}"
+      >
+        <f:render section="content" arguments="{_all}" />
+      </f:form>
+    </f:else>
+  </f:if>
+
+  <f:render section="footer" arguments="{_all}" />
+
+  <div class="back-to-login">
+    <f:link.action
+      extensionName="Felogin"
+      pluginName="Login"
+      controller="Login"
+      action="login"
+      additionalParams="{pid: storagePid, redirect_url: redirectURL, referer: referer, noRedirect: noRedirect}"
+    >
+      <f:render partial="RenderLabelOrMessage" arguments="{key: 'forgot_header_backToLogin'}" />
+    </f:link.action>
+  </div>
+
+  <f:section name="content">
+    <fieldset class="ig-mfa-frontend-loginForm">
+      <f:comment>
+        <legend>
+          <f:translate key="login" />
+        </legend>
+      </f:comment>
+      <div class="">
+        <div class="">
+          <div class="fancyInput">
+            <f:form.hidden name="identifier" value="{provider.identifier}" />
+            <div class="provider-content">{providerContent -> f:format.raw()}</div>
+            <div class="provider-attempts">
+              <f:if condition="{providerAttempts.max} != 0">
+                <f:then>
+                  <f:translate
+                    id="attemptOfMaximum"
+                    arguments="{0: providerAttempts.current, 1: providerAttempts.max}"
+                    extensionName="IgMfaFrontend"
+                  />
+                </f:then>
+              </f:if>
+            </div>
+          </div>
+        </div>
+
+        <f:if condition="{permaloginStatus} > -1">
+          <div class="">
+            <label>
+              <f:translate id="permalogin" />
+              <f:if condition="{permaloginStatus} == 1">
+                <f:then>
+                  <f:form.hidden
+                    name="permalogin"
+                    value="0"
+                    additionalAttributes="{disabled: 'disabled'}"
+                  />
+                  <f:form.checkbox name="permalogin" id="permalogin" value="1" checked="checked" />
+                </f:then>
+                <f:else>
+                  <f:form.hidden name="permalogin" value="0" />
+                  <f:form.checkbox name="permalogin" id="permalogin" value="1" />
+                </f:else>
+              </f:if>
+            </label>
+          </div>
+        </f:if>
+
+        <div class="">
+          <f:form.submit value="{f:translate(key: 'login')}" name="submit" />
+        </div>
+      </div>
+      <div class="felogin-hidden">
+        <f:form.hidden name="logintype" value="login" />
+        <f:form.hidden name="{mfa.requestToken.name}" value="{mfa.requestToken.value}" />
+        <f:form.hidden name="user" value="{mfa.user}" />
+        <f:form.hidden name="pid" value="{storagePid}" />
+        <f:if condition="{redirectURL}!=''">
+          <f:form.hidden name="redirect_url" value="{redirectURL}" />
+        </f:if>
+        <f:if condition="{referer}!=''">
+          <f:form.hidden name="referer" value="{referer}" />
+        </f:if>
+        <f:if condition="{redirectReferrer}!=''">
+          <f:form.hidden name="redirectReferrer" value="off" />
+        </f:if>
+        <f:if condition="{noRedirect}!=''">
+          <f:form.hidden name="noredirect" value="1" />
+        </f:if>
+        {extraHidden}
+      </div>
+    </fieldset>
+  </f:section>
+
+  <f:section name="footer">
+    <div class="alternative-providers">
+      <f:if condition="{alternativeProviders}">
+	<h5>
+          <f:translate
+            key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:auth.alternativeProviders"
+            />:
+	</h5>
+
+	<ul>
+	  <f:for each="{alternativeProviders}" as="alternativeProvider">
+            <li><f:link.action
+		  extensionName="Felogin"
+		  pluginName="Login"
+		  controller="Login"
+		  action="login"
+		  additionalParams="{identifier: alternativeProvider.identifier, __MfaRequestToken: mfa.requestToken.value,logintype: 'mfa', user: mfa.user, pid: storagePid, redirect_url: redirectURL, referer: referer, noRedirect: noRedirect}"
+		  title="{f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:auth.alternativeProviders.use', arguments: {0: '{alternativeProvider.title  -> f:translate(key: alternativeProvider.title, default: alternativeProvider.title)}'})}"
+		  >
+		<f:translate
+		  key="LLL:EXT:backend/Resources/Private/Language/locallang_mfa.xlf:auth.alternativeProviders.use"
+		  arguments="{0: '{alternativeProvider.title -> f:translate(key: alternativeProvider.title, default: alternativeProvider.title)}'}"
+		  />
+              </f:link.action>
+	    </li>
+	  </f:for>
+	</ul>
+      </f:if>
+    </div>
+  </f:section>
+</html>
