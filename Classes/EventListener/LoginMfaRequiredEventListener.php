@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Authentication\Mfa\MfaProviderRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
-final readonly class LoginMfaRequiredEventListener
+final class LoginMfaRequiredEventListener
 {
     private MfaProviderRegistry $mfaProviderRegistry;
 
