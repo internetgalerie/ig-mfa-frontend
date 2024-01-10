@@ -25,13 +25,7 @@
 	"typo3-ter/ig-mfa-frontend": "self.version"
     },
     "config": {
-	"vendor-dir": ".Build/vendor",
-	"bin-dir": ".Build/bin"
-    },
-    "scripts": {
-	"post-autoload-dump": [
-	    "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-	]
+	"sort-packages": true
     },
     "extra": {
 	"typo3/cms": {

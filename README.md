@@ -15,14 +15,31 @@ The recommended way to install the extension is by using [Composer][2]. In your 
 
 ### 2) TypoScript
 
-| property               | Description                            | Default                                                            |
-| ---------------------- | -------------------------------------- | ------------------------------------------------------------------ |
-| recommendedMfaProvider | Recommended Provider (marked)          | totp                                                               |
-| allowedProviders       | Allowed Provider (leave empty for all) |                                                                    |
-| cssFile                | Path to the Css file used              | EXT:ig_mfa_frontend/Resources/Public/Css/configuration.css         |
-| jsFile                 | Path to the Js file used               | EXT:ig_mfa_frontend/Resources/Public/JavaScript/ig-mfa-frontend.js |
+| property               | Description                                  | Default                                                            |
+| ---------------------- | -------------------------------------------- | ------------------------------------------------------------------ |
+| recommendedMfaProvider | Recommended Provider (marked)                | totp                                                               |
+| allowedProviders       | Allowed Provider (leave empty for all)       |                                                                    |
+| cssFileBase            | Path to the Css Base file from TYPO3 backend | EXT:ig_mfa_frontend/Resources/Public/Css/base.css                  |
+| cssFile                | Path to the Css file used                    | EXT:ig_mfa_frontend/Resources/Public/Css/configuration.css         |
+| jsFile                 | Path to the Js file used                     | EXT:ig_mfa_frontend/Resources/Public/JavaScript/ig-mfa-frontend.js |
 
-## 3) Core Changes
+
+* base.css includes styles from TYPO3 backend, including Bootstrap, making it bulky and ugly for the frontend. TODO: Clean up and optimize, possibly add and call provider frontend setup if available (to get better html)
+
+### 3) Providers
+
+tested providers:
+
+| Provider ID        |	Description                        | Extension             | Example                                        |
+| ------------------ | ----------------------------------- | --------------------- | ---------------------------------------------- |
+| totp 	             | Time-based One-time Password (TOTP) | Core                  | Google Authenticator                           |
+| recovery-codes     | One-Time-Password (OTP)             | Core                  | Transaction Authentication Number (TAN)        |
+| webauthn-platform  | Built-in Authenticators (FIDO2)     | bnf/mfa-webauthn      | Incorporated fingerprint scanner               |
+| webauthn           | Security Keys (needs https)         | bnf/mfa-webauthn      | hardware devices containing cryptographic keys |
+| yubikey            | YubiKey OTP MFA authentication      | derhansen/mfa_yubikey | YubiKey                                        |
+
+
+## 4) Core Changes
 
 Changes to show and delete MFA Providers for frontend users in Backend (not required for frontend functionality)
 
