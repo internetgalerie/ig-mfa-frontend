@@ -9,9 +9,12 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Authentication\Mfa\MfaProviderManifestInterface;
 use TYPO3\CMS\Core\Authentication\Mfa\MfaProviderPropertyManager;
 use TYPO3\CMS\Core\Authentication\Mfa\MfaViewType;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
+
 
 /**
  * Two-factor authentication setup controller.
@@ -64,8 +67,15 @@ class MfaConfigurationController extends AbstractMfaController
         if ($sitename !== '') {
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'] = $sitename;
         }
-
-        $providerResponse = $mfaProvider->handleRequest($this->request, $propertyManager, MfaViewType::SETUP);
+        if (!isset($GLOBALS['LANG'])) {
+            $language = $this->request->getAttribute('language', null);
+            $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->createFromSiteLanguage($language);
+        }
+        try {
+            $providerResponse = $mfaProvider->handleRequest($this->request, $propertyManager, MfaViewType::SETUP);
+        } catch (\Exception $exception) {
+            return new ForwardResponse('overview');
+        }
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'] = $backupSitename;
 
         $this->view->assignMultiple([

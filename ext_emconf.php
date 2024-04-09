@@ -8,10 +8,10 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'typo3@internetgalerie.ch',
     'state' => 'beta',
     'clearCacheOnLoad' => 0,
-    'version' => '0.9.0',
+    'version' => '0.9.1',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-12.4.99',
+            'typo3' => '12.4.0-12.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],
