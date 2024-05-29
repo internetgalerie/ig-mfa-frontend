@@ -1,0 +1,13 @@
+mod.wizards.newContentElement.wizardItems.plugins {
+	elements {
+		igMfaFrontend {
+			iconIdentifier = tx-igmfafrontend-svgicon
+			title = LLL:EXT:ig_mfa_frontend/Resources/Private/Language/Database.xlf:tt_content.plugin.ig_mfa_frontend_mfaconfiguration.title
+			description = LLL:EXT:ig_mfa_frontend/Resources/Private/Language/Database.xlf:tt_content.plugin.ig_mfa_frontend_mfaconfiguration.description
+			tt_content_defValues {
+				CType = list
+				list_type = igmfafrontend_mfaconfiguration
+			}
+		}
+	}
+}

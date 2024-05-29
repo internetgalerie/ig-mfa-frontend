@@ -6,6 +6,9 @@
                         <trans-unit id="tt_content.plugin.ig_mfa_frontend_mfaconfiguration.title" resname="tt_content.plugin.ig_mfa_frontend_mfaconfiguration.title">
                                 <source>Frontend User: MFA Configuration</source>
                         </trans-unit>
+                        <trans-unit id="tt_content.plugin.ig_mfa_frontend_mfaconfiguration.description" resname="tt_content.plugin.ig_mfa_frontend_mfaconfiguration.description">
+                                <source>Show Setup for MFA for logged in frontend users</source>
+                        </trans-unit>
                 </body>
         </file>
 </xliff>
