@@ -93,5 +93,38 @@ looks like:
 
 Currently, we are overriding the FrontendUserAuthenticator middleware in this extension. We have added the handling of the MfaRequiredException exception and subsequently dispatching an event. So no changes are required.
 
+
+## Screenshots
+
+### MFA Setup
+
+#### Overview of Available MFA Providers
+![Setup for MFA overview for logged in users](Documentation/Images/mfa-user-setup-overview.png "Setup for MFA overview for logged in users")
+
+The Setup plugin starts with an overview of the available MFA providers for logged-in users. Users can select and activate their preferred methods.
+
+#### Example: Setting up Time-based One-Time Password
+
+This image demonstrates the setup process for a Time-based One-Time Password MFA method. Users can follow these steps to configure their MFA device.
+
+![Setup for MFA provider for logged in users](Documentation/Images/mfa-user-setup-provider.png "Setup for MFA provider for logged in users")
+
+### Login Process
+
+#### Step 1: felogin Login Form
+
+Users start by filling out the login form provided by felogin extension.
+   
+![felogin Login Form](Documentation/Images/mfa-login-step-1.png "felogin Login Form")
+
+#### Step 2: MFA Login Form
+
+After successful authentication with the username and password, users are prompted with the MFA (Multi-Factor Authentication) login form.
+
+![MFA Login Form](Documentation/Images/mfa-login-step-2.png "MFA Login Form")
+
+default template is `EXT:ig_mfa_frontend/Resources/Private/Extensions/felogin/Templates/Login/Mfa.html`
+
+
 [1]: https://docs.typo3.org/typo3cms/extensions/ig_mfa_frontend/
 [2]: https://getcomposer.org/
