@@ -1,5 +1,5 @@
 # cat=basic; type=boolean; label=Is MFA required for loggin
-requireMfa = 1
+requireMfa = 0
 
 # cat=basic; type=int; label=MFA is only required for this frontend usergroup (otherwise all users)
 requireMfaForFrontendUsergroup =
