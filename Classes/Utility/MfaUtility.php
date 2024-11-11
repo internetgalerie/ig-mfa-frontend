@@ -213,7 +213,7 @@ class MfaUtility
 
     public static function getFrontendUserAuthentication(): ?FrontendUserAuthentication
     {
-        return isset($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->fe_user : null;
+        return isset($GLOBALS['TYPO3_REQUEST']) ? $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.user') : null;
     }
 
     protected static function getMfaProviderRegistry(): MfaProviderRegistry

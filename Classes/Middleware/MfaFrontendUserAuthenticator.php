@@ -9,6 +9,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\Authentication\Event\AfterUserLoggedInEvent;
 use TYPO3\CMS\Core\Authentication\Mfa\MfaRequiredException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
@@ -25,7 +26,6 @@ class MfaFrontendUserAuthenticator extends FrontendUserAuthenticator
 
         // Rate Limiting
         $rateLimiter = $this->ensureLoginRateLimit($frontendUser, $request);
-
         // Authenticate now
         // IG BEGIN
         try {
@@ -45,7 +45,6 @@ class MfaFrontendUserAuthenticator extends FrontendUserAuthenticator
                 throw $mfaRequiredException;
             }
         }
-
         // IG END
 
         // no matter if we have an active user we try to fetch matching groups which can
@@ -58,6 +57,9 @@ class MfaFrontendUserAuthenticator extends FrontendUserAuthenticator
 
         if ($this->context->getAspect('frontend.user')->isLoggedIn() && $rateLimiter) {
             $rateLimiter->reset();
+            if (class_exists(AfterUserLoggedInEvent::class)) {
+                $this->eventDispatcher->dispatch(new AfterUserLoggedInEvent($frontendUser, $request));
+            }
         }
 
         $response = $handler->handle($request);

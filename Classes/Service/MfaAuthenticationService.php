@@ -26,12 +26,16 @@ class MfaAuthenticationService extends AuthenticationService
         $request = $this->authInfo['request'];
 
         $identifier = MfaUtility::getProviderIdentifierByRequest($request);
-
         // own status 'mfa' is not defined in login controller and is only used for changing the mfa provider with links
-        if (
-            ($this->login['status'] !== LoginType::LOGIN && $this->login['status'] !== 'mfa')
-            || $identifier === ''
-        ) {
+        $status = $this->login['status'] ?? '';
+        if (method_exists(LoginType::class, 'tryFrom')) {
+            // TYPO3 v13
+            $isLoggedIn = LoginType::tryFrom($status) !== LoginType::LOGIN;
+        } else {
+            // TYPO3 v12
+            $isLoggedIn = $status !== LoginType::LOGIN;
+        }
+        if (($isLoggedIn && $status !== 'mfa') || $identifier === '') {
             return false;
         }
 
