@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Internetgalerie\IgMfaFrontend\Middleware;
 
+use Internetgalerie\IgMfaFrontend\Authentication\MfaFrontendUserAuthentication;
 use Internetgalerie\IgMfaFrontend\Event\LoginMfaRequiredEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -22,7 +23,7 @@ class MfaFrontendUserAuthenticator extends FrontendUserAuthenticator
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $frontendUser = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
+        $frontendUser = GeneralUtility::makeInstance(MfaFrontendUserAuthentication::class);
 
         // Rate Limiting
         $rateLimiter = $this->ensureLoginRateLimit($frontendUser, $request);
@@ -54,6 +55,14 @@ class MfaFrontendUserAuthenticator extends FrontendUserAuthenticator
         // Register the frontend user as aspect and within the request
         $this->context->setAspect('frontend.user', $frontendUser->createUserAspect());
         $request = $request->withAttribute('frontend.user', $frontendUser);
+
+        // IG BEGIN
+        if ($frontendUser->isMfaSetupRequired() && $this->context->getAspect('frontend.user')->isLoggedIn() && !$frontendUser->getSessionData('mfa')) {
+            $rateLimiter->reset();
+            // @todo redirect to own template for a message or do it before setAspect for standard error message
+            return $handler->handle($request);
+        }
+        // IG END
 
         if ($this->context->getAspect('frontend.user')->isLoggedIn() && $rateLimiter) {
             $rateLimiter->reset();

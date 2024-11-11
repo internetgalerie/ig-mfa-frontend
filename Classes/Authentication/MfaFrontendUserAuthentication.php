@@ -7,6 +7,7 @@ namespace Internetgalerie\IgMfaFrontend\Authentication;
 use Internetgalerie\IgMfaFrontend\Service\MfaAuthenticationService;
 use Internetgalerie\IgMfaFrontend\Utility\MfaUtility;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
@@ -57,6 +58,27 @@ class MfaFrontendUserAuthentication extends FrontendUserAuthentication
             return true;
         }
 
+        return false;
+    }
+
+    public function isMfaSetupRequired(): bool
+    {
+        $globalConfig =  $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ig_mfa_frontend'];
+        $requireMfa = (int)($globalConfig['requireMfa'] ?? 0);
+        if (!$requireMfa) {
+            return false;
+        }
+        $requireMfaForFrontendUsergroup = (int)($globalConfig['requireMfaForFrontendUsergroup'] ?? 0);
+        if ($requireMfaForFrontendUsergroup  === 0)  {
+            return true;
+        }
+        if (is_array($this->user)) {
+            // @todo resolveGroupsForUser (subgroups)
+            $userGroupsUID = GeneralUtility::intExplode(',', $this->user['usergroup'], true);
+            if (!empty($userGroupsUID)) {
+                return in_array($requireMfaForFrontendUsergroup, $userGroupsUID, true);
+            }
+        }
         return false;
     }
 }

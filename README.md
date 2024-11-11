@@ -39,7 +39,16 @@ tested providers:
 | yubikey            | YubiKey OTP MFA authentication      | derhansen/mfa_yubikey | YubiKey                                        |
 
 
-## 4) Core Changes
+
+### 4) Extension Setup
+
+| Setup                          |  Description                                                               |
+| ------------------------------ | -------------------------------------------------------------------------- | 
+| requireMfa                     | is MFA required for login (users without MFA cannot log in)                |
+| requireMfaForFrontendUsergroup | if requireMfa is active, MFA is only mandatory for this frontend usergroup |
+
+
+## 3. Core Changes
 
 Changes to show and delete MFA Providers for frontend users in Backend (not required for frontend functionality)
 
@@ -94,7 +103,7 @@ looks like:
 Currently, we are overriding the FrontendUserAuthenticator middleware in this extension. We have added the handling of the MfaRequiredException exception and subsequently dispatching an event. So no changes are required.
 
 
-## Screenshots
+## 4. Screenshots
 
 ### MFA Setup
 
