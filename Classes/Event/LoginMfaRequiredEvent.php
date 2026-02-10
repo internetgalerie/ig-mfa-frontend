@@ -17,7 +17,7 @@ class LoginMfaRequiredEvent
     public function __construct(
         private ServerRequestInterface $request,
         private readonly FrontendUserAuthentication $frontendUserAuthentication,
-        private readonly LimiterInterface $rateLimiter,
+        private readonly ?LimiterInterface $rateLimiter = null,
     ) {
     }
 
@@ -36,7 +36,7 @@ class LoginMfaRequiredEvent
         return $this->frontendUserAuthentication;
     }
 
-    public function getRateLimiter(): LimiterInterface
+    public function getRateLimiter(): ?LimiterInterface
     {
         return $this->rateLimiter;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Internetgalerie\IgMfaFrontend\EventListener;
 
 use Internetgalerie\IgMfaFrontend\Utility\MfaUtility;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\Mfa\MfaProviderPropertyManager;
 use TYPO3\CMS\Core\Authentication\Mfa\MfaProviderRegistry;
 use TYPO3\CMS\Core\Authentication\Mfa\MfaViewType;
@@ -19,14 +20,17 @@ final class MfaModifyLoginFormViewEventListener
     {
         $view = $event->getView();
         $renderingContext = $view->getRenderingContext();
-        $request = $renderingContext->getRequest();
+        if (!$renderingContext->hasAttribute(ServerRequestInterface::class)) {
+            throw new \RuntimeException('Required request not found in RenderingContext', 1724243608);
+        }
+        $request = $renderingContext->getAttribute(ServerRequestInterface::class);
         $frontendUser = $request->getAttribute('frontend.user');
         $newToken = $request->getAttribute('ig-mfa-frontend') ?? false;
         //$requestUsername = $request->getParsedBody()['user'] ?? $request->getQueryParams()['user'] ?? null;
         $mfa = [];
 
         if ($newToken) {
-            $view->setTemplate('Mfa');
+            $renderingContext->setControllerAction('Mfa');
             // create token for user
             $requestToken = MfaUtility::createToken([
                 'username' => $frontendUser->user['username'],

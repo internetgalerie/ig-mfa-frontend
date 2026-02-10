@@ -17,13 +17,13 @@ declare(strict_types=1);
 
 namespace Internetgalerie\IgMfaFrontend\ViewHelpers\Link;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * A ViewHelper for creating URIs to extbase actions. Tailored for extbase plugins, uses extbase Request and extbase UriBuilder.
@@ -41,8 +41,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class ActionViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     public function initializeArguments(): void
     {
         $this->registerArgument('requestToken', 'mixed', 'whether to add that request token to the form');
@@ -96,50 +94,44 @@ class ActionViewHelper extends AbstractViewHelper
         );
     }
 
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        /** @var RenderingContext $renderingContext */
-        $request = $renderingContext->getRequest();
-        if (!$request instanceof RequestInterface) {
-            throw new \RuntimeException(
-                'ViewHelper f:uri.action can be used only in extbase context and needs a request implementing extbase RequestInterface.',
-                1639819692
-            );
+    public function render() : string
+    {
+ 
+        if (!$this->renderingContext->hasAttribute(ServerRequestInterface::class)) {
+            throw new \RuntimeException('Required request not found in RenderingContext', 1724243608);
         }
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
 
         /** @var int $pageUid */
-        $pageUid = $arguments['pageUid'] ?? 0;
+        $pageUid = $this->arguments['pageUid'] ?? 0;
         /** @var int $pageType */
-        $pageType = $arguments['pageType'] ?? 0;
+        $pageType = $this->arguments['pageType'] ?? 0;
         /** @var bool $noCache */
-        $noCache = $arguments['noCache'] ?? false;
+        $noCache = $this->arguments['noCache'] ?? false;
         /** @var string|null $section */
-        $section = $arguments['section'] ?? null;
+        $section = $this->arguments['section'] ?? null;
         /** @var string|null $format */
-        $format = $arguments['format'] ?? null;
+        $format = $this->arguments['format'] ?? null;
         /** @var bool $linkAccessRestrictedPages */
-        $linkAccessRestrictedPages = $arguments['linkAccessRestrictedPages'] ?? false;
+        $linkAccessRestrictedPages = $this->arguments['linkAccessRestrictedPages'] ?? false;
         /** @var array|null $additionalParams */
-        $additionalParams = $arguments['additionalParams'] ?? null;
+        $additionalParams = $this->arguments['additionalParams'] ?? null;
         /** @var bool $absolute */
-        $absolute = $arguments['absolute'] ?? false;
+        $absolute = $this->arguments['absolute'] ?? false;
         /** @var bool|string $addQueryString */
-        $addQueryString = $arguments['addQueryString'] ?? false;
-        /** @var array|null $argumentsToBeExcludedFromQueryString */
-        $argumentsToBeExcludedFromQueryString = $arguments['argumentsToBeExcludedFromQueryString'] ?? null;
+        $addQueryString = $this->arguments['addQueryString'] ?? false;
+        /** @var array|null $this->argumentsToBeExcludedFromQueryString */
+        $this->argumentsToBeExcludedFromQueryString = $this->arguments['argumentsToBeExcludedFromQueryString'] ?? null;
         /** @var string|null $action */
-        $action = $arguments['action'] ?? null;
+        $action = $this->arguments['action'] ?? null;
         /** @var string|null $controller */
-        $controller = $arguments['controller'] ?? null;
+        $controller = $this->arguments['controller'] ?? null;
         /** @var string|null $extensionName */
-        $extensionName = $arguments['extensionName'] ?? null;
+        $extensionName = $this->arguments['extensionName'] ?? null;
         /** @var string|null $pluginName */
-        $pluginName = $arguments['pluginName'] ?? null;
-        /** @var array|null $arguments */
-        $arguments = $arguments['arguments'] ?? [];
+        $pluginName = $this->arguments['pluginName'] ?? null;
+        /** @var array|null $this->arguments */
+        $this->arguments = $this->arguments['arguments'] ?? [];
 
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $uriBuilder->reset()
@@ -177,14 +169,14 @@ class ActionViewHelper extends AbstractViewHelper
             $uriBuilder->setAddQueryString($addQueryString);
         }
 
-        if (is_array($argumentsToBeExcludedFromQueryString)) {
-            $uriBuilder->setArgumentsToBeExcludedFromQueryString($argumentsToBeExcludedFromQueryString);
+        if (is_array($this->argumentsToBeExcludedFromQueryString)) {
+            $uriBuilder->setArgumentsToBeExcludedFromQueryString($this->argumentsToBeExcludedFromQueryString);
         }
 
         if ($linkAccessRestrictedPages === true) {
             $uriBuilder->setLinkAccessRestrictedPages($linkAccessRestrictedPages);
         }
 
-        return $uriBuilder->uriFor($action, $arguments, $controller, $extensionName, $pluginName);
+        return $uriBuilder->uriFor($action, $this->arguments, $controller, $extensionName, $pluginName);
     }
 }

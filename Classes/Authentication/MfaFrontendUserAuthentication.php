@@ -63,7 +63,8 @@ class MfaFrontendUserAuthentication extends FrontendUserAuthentication
 
     public function isMfaSetupRequired(): bool
     {
-        $globalConfig =  $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ig_mfa_frontend'];
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+        $globalConfig = $extensionConfiguration->get('ig_mfa_frontend');
         $requireMfa = (int)($globalConfig['requireMfa'] ?? 0);
         if (!$requireMfa) {
             return false;
