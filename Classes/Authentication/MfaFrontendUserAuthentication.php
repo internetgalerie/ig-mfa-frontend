@@ -74,8 +74,7 @@ class MfaFrontendUserAuthentication extends FrontendUserAuthentication
             return true;
         }
         if (is_array($this->user)) {
-            // @todo resolveGroupsForUser (subgroups)
-            $userGroupsUID = GeneralUtility::intExplode(',', $this->user['usergroup'], true);
+            $userGroupsUID = array_keys($this->userGroups);
             if (!empty($userGroupsUID)) {
                 return in_array($requireMfaForFrontendUsergroup, $userGroupsUID, true);
             }
